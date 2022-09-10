@@ -2,6 +2,7 @@ package out
 
 import (
 	"fmt"
+	"mapping/internal/application/port/out"
 	"mapping/internal/domain"
 	"time"
 
@@ -27,11 +28,11 @@ type OrderDAO struct {
 	CreatedAt time.Time
 }
 
-func (r OrderRepository) SaveOrder(o *domain.Order) {
+func (r OrderRepository) SaveOrder(cmd *out.SaveOrderCommand) {
 	orderDao := OrderDAO{
-		Price: o.Price,
-		Count: o.Count,
-		Total: o.Total,
+		Price: cmd.Price,
+		Count: cmd.Count,
+		Total: cmd.Total,
 	}
 
 	result := r.db.Create(&orderDao)

@@ -19,10 +19,17 @@ func NewCreateOrder(saveOrder out.SaveOrderPort) in.CreateOrder {
 	}
 }
 
-func (s CreateOrderService) Action(o *domain.Order) *domain.Order {
+func (s CreateOrderService) Action(command *in.CreateOrderCommand) *domain.Order {
+	o := domain.Order{
+		Price: command.Price,
+		Count: command.Count,
+	}
+
 	withTax := 1.1
 	o.Total = float64(o.Count*o.Price) * withTax
-	o.CreatedAt = now()
-	s.saveOrder.SaveOrder(o)
-	return o
+
+	cmd := out.NewSaveOrderCommand(o.Price, o.Count, o.Total, now())
+	s.saveOrder.SaveOrder(&cmd)
+
+	return &o
 }

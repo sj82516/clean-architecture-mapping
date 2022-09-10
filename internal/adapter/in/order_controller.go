@@ -2,8 +2,8 @@ package in
 
 import (
 	"mapping/internal/adapter/out"
+	"mapping/internal/application/port/in"
 	"mapping/internal/application/service"
-	"mapping/internal/domain"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -37,8 +37,8 @@ func (c *OrderController) CreateOrder(ctx *gin.Context) {
 		return
 	}
 
-	order := domain.Order{Price: o.Price, Count: o.Count}
-	srv.Action(&order)
+	cmd := in.CreateOrderCommand{Price: o.Price, Count: o.Count}
+	order := srv.Action(&cmd)
 
 	ctx.JSON(http.StatusOK, gin.H{"total": order.Total})
 }
