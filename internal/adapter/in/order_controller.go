@@ -26,11 +26,18 @@ func NewOrderController(db *gorm.DB, router gin.IRouter) OrderController {
 func (c *OrderController) CreateOrder(ctx *gin.Context) {
 	var srv = service.NewCreateOrder(c.repo)
 
-	var order domain.Order
-	if err := ctx.ShouldBindJSON(&order); err != nil {
+	type CreateOrderRequest struct {
+		Price int `json:"price"`
+		Count int `json:"count"`
+	}
+
+	var o CreateOrderRequest
+	if err := ctx.ShouldBindJSON(&o); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err})
 		return
 	}
+
+	order := domain.Order{Price: o.Price, Count: o.Count}
 	srv.Action(&order)
 
 	ctx.JSON(http.StatusOK, gin.H{"total": order.Total})
