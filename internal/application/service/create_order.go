@@ -22,7 +22,6 @@ func NewCreateOrder(saveOrder out.SaveOrderPort) in.CreateOrder {
 func (s CreateOrderService) Action(o *domain.Order) *domain.Order {
 	withTax := 1.1
 	o.Total = float64(o.Count*o.Price) * withTax
-	o.CreatedAt = now()
 	s.saveOrder.SaveOrder(o)
 	return o
 }
