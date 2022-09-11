@@ -38,7 +38,7 @@ func (c *OrderController) CreateOrder(ctx *gin.Context) {
 	}
 
 	cmd := in.CreateOrderCommand{Price: o.Price, Count: o.Count}
-	order := srv.Action(&cmd)
+	output := srv.Action(&cmd)
 
-	ctx.JSON(http.StatusOK, gin.H{"total": order.Total})
+	ctx.JSON(http.StatusOK, gin.H{"total": output.Total})
 }
